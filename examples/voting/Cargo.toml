@@ -1,5 +1,5 @@
 [package]
-name = "calculator"
+name = "voting "
 version = "0.0.1"
 edition = "2018"
 authors = ["Zarb development team <admin@zarb.network>"]
@@ -10,7 +10,7 @@ minicbor = { version = "0.11.1", features = ["half", "derive"] }
 minicbor-derive = "0.7.1"
 
 [lib]
-name = "calculator"
+name = "voting"
 crate-type = ["cdylib", "rlib"]
 
 [profile.release]

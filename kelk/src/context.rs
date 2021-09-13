@@ -4,7 +4,7 @@
 extern crate alloc;
 
 
-use core::{borrow::BorrowMut, ops::IndexMut};
+use core::{borrow::BorrowMut, cell::RefCell, ops::IndexMut};
 
 use crate::error::KelkError;
 use alloc::{boxed::Box, vec::Vec};
@@ -12,7 +12,7 @@ use alloc::{boxed::Box, vec::Vec};
 /// TODO
 pub trait ContextAPI {
     /// TODO
-    fn write_storage(&mut self, offset: usize, data: &[u8]) -> Result<(), KelkError>;
+    fn write_storage(&self, offset: usize, data: &[u8]) -> Result<(), KelkError>;
 
     /// TODO
     fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError>;
@@ -61,7 +61,7 @@ impl ContextExt {
 }
 
 impl ContextAPI for ContextExt {
-    fn write_storage(&mut self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
+    fn write_storage(&self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
         todo!("unimplemented");
     }
 
@@ -73,29 +73,29 @@ impl ContextAPI for ContextExt {
 
 ///todo
 pub struct MockContext {
-    storage: [u8;512],
+    storage: RefCell<[u8;512]>,
 }
 
 impl MockContext {
     ///todo
     pub fn new() -> Self {
         MockContext {
-            storage: [0u8;512],
+            storage: RefCell::new([0u8;512]),
         }
     }
 }
 
 impl ContextAPI for MockContext {
-    fn write_storage(&mut self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
+    fn write_storage(&self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
         for i in 0..data.len() - 1 {
-            let index=self.storage.index_mut(offset+i);
-            *index=data[offset+i];
+            let mut store=self.storage.borrow_mut();
+            store[offset+i]=data[i];
         }
         Ok(())
     }
 
     fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError> {
-        let c = &self.storage[offset..length];
+        let c = &self.storage.borrow()[offset..length];
         Ok(c.into())
     }
 }
