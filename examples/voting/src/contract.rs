@@ -1,6 +1,6 @@
 
 use crate::error::BallotError;
-use crate::message::CalcMsg;
+use crate::message::BallotMsg;
 use kelk::{context::ContextMut, kelk_derive, Response};
 
 const PROPOSALS_OFFSET:usize=128;
@@ -40,9 +40,9 @@ fn instantiate(_ctx: ContextMut) -> Result<Response, BallotError> {
 
 /// The process_msg function is the main function of the *deployed* contract actor
 // #[kelk_derive(process_msg)]
-fn process_msg(ctx: ContextMut, msg: CalcMsg) -> Result<Response, BallotError> {
+fn process_msg(ctx: ContextMut, msg: BallotMsg) -> Result<Response, BallotError> {
     let ans = match msg {
-        CalcMsg::Vote { p } => vote(ctx, p),
+        BallotMsg::Vote { p } => vote(ctx, p),
     }?;
 
     Ok(Response { res: 0 })
@@ -50,4 +50,4 @@ fn process_msg(ctx: ContextMut, msg: CalcMsg) -> Result<Response, BallotError> {
 
 #[cfg(test)]
 #[path = "./contract_test.rs"]
-mod instance_test;
+mod contract_test;

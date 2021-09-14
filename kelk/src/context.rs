@@ -72,20 +72,25 @@ impl ContextAPI for ContextExt {
 
 
 ///todo
-pub struct MockContext {
-    storage: RefCell<[u8;512]>,
+pub struct MockAPI {
+    storage: RefCell<[u8;u16::MAX as usize]>,
 }
 
-impl MockContext {
+impl MockAPI {
     ///todo
     pub fn new() -> Self {
-        MockContext {
-            storage: RefCell::new([0u8;512]),
+        // ContextMut{
+        //     api:MockContext{
+        //         storage: RefCell::new([0u8;512]),
+        //     }
+        // }
+        MockAPI {
+            storage: RefCell::new([0u8;u16::MAX as usize]),
         }
     }
 }
 
-impl ContextAPI for MockContext {
+impl ContextAPI for MockAPI {
     fn write_storage(&self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
         for i in 0..data.len() - 1 {
             let mut store=self.storage.borrow_mut();
@@ -95,7 +100,7 @@ impl ContextAPI for MockContext {
     }
 
     fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError> {
-        let c = &self.storage.borrow()[offset..length];
+        let c = &self.storage.borrow()[offset..offset+length];
         Ok(c.into())
     }
 }

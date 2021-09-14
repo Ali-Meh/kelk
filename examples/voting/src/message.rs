@@ -1,7 +1,7 @@
 use minicbor::{Decode, Encode};
 
 #[derive(Clone, Debug, Encode, Decode)]
-pub enum CalcMsg {
+pub enum BallotMsg {
     #[n(0)]
     Vote {
         #[n(0)]

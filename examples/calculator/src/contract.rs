@@ -61,4 +61,4 @@ fn process_msg(ctx: ContextMut, msg: CalcMsg) -> Result<Response, CalcError> {
 
 #[cfg(test)]
 #[path = "./contract_test.rs"]
-mod instance_test;
+mod contract_test;
