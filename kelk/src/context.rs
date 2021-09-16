@@ -12,6 +12,9 @@ use alloc::{boxed::Box, vec::Vec};
 /// TODO
 pub trait ContextAPI {
     /// TODO
+    fn msg_sender(&self) -> Result<Vec<u8>, KelkError>;
+
+    /// TODO
     fn write_storage(&self, offset: usize, data: &[u8]) -> Result<(), KelkError>;
 
     /// TODO
@@ -61,6 +64,9 @@ impl ContextExt {
 }
 
 impl ContextAPI for ContextExt {
+    fn msg_sender(&self) -> Result<Vec<u8>, KelkError> {
+        todo!("unimplemented");
+    }
     fn write_storage(&self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
         todo!("unimplemented");
     }
@@ -101,6 +107,11 @@ impl ContextAPI for MockAPI {
 
     fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError> {
         let c = &self.storage.borrow()[offset..offset+length];
+        Ok(c.into())
+    }
+
+    fn msg_sender(&self) -> Result<Vec<u8>, KelkError> {
+        let c = b"zrb1rwchw6xq0fqj45c9p3lagx9tgu7l9jgzjglp0v";
         Ok(c.into())
     }
 }
