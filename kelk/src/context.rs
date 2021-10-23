@@ -1,13 +1,9 @@
 //! The context for running contract actor
 
-#![feature(alloc)]
-extern crate alloc;
-
-
-use core::{borrow::BorrowMut, ops::IndexMut};
-
 use crate::error::KelkError;
-use alloc::{boxed::Box, vec::Vec};
+use crate::params::*;
+use alloc::vec::Vec;
+
 
 /// TODO
 pub trait ContextAPI {
@@ -15,7 +11,10 @@ pub trait ContextAPI {
     fn write_storage(&mut self, offset: usize, data: &[u8]) -> Result<(), KelkError>;
 
     /// TODO
-    fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError>;
+    fn read_storage(&self, offset: u32, length: u32) -> Result<Vec<u8>, KelkError>;
+
+    /// TODO
+    fn get_param(&self, param_id: i32) -> Result<ParamType, KelkError>;
 }
 
 /// TODO
@@ -50,52 +49,3 @@ impl<C: ContextAPI> OwnedContext<C> {
     }
 }
 
-/// TODO
-pub struct ContextExt {}
-
-impl ContextExt {
-    /// TODO
-    pub fn new() -> Self {
-        ContextExt {}
-    }
-}
-
-impl ContextAPI for ContextExt {
-    fn write_storage(&mut self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
-        todo!("unimplemented");
-    }
-
-    fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError> {
-        todo!("unimplemented");
-    }
-}
-
-
-///todo
-pub struct MockContext {
-    storage: [u8;512],
-}
-
-impl MockContext {
-    ///todo
-    pub fn new() -> Self {
-        MockContext {
-            storage: [0u8;512],
-        }
-    }
-}
-
-impl ContextAPI for MockContext {
-    fn write_storage(&mut self, offset: usize, data: &[u8]) -> Result<(), KelkError> {
-        for i in 0..data.len() - 1 {
-            let index=self.storage.index_mut(offset+i);
-            *index=data[offset+i];
-        }
-        Ok(())
-    }
-
-    fn read_storage(&self, offset: usize, length: usize) -> Result<Vec<u8>, KelkError> {
-        let c = &self.storage[offset..length];
-        Ok(c.into())
-    }
-}
