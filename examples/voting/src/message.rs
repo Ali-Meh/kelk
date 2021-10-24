@@ -5,6 +5,6 @@ pub enum BallotMsg {
     #[n(0)]
     Vote {
         #[n(0)]
-        p: usize,
+        p: u32,
     },
 }

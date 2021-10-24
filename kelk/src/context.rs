@@ -2,7 +2,7 @@
 
 use crate::error::KelkError;
 use crate::params::*;
-use alloc::{boxed::Box, vec::Vec};
+use alloc::vec::Vec;
 use core::cell::RefCell;
 
 /// TODO
@@ -84,7 +84,7 @@ impl ContextAPI for ContextExt {
 
 ///todo
 pub struct MockAPI {
-    storage: RefCell<[u8; u32::MAX as usize]>,
+    storage: RefCell<[u8; u16::MAX as usize]>,
 }
 
 impl MockAPI {
@@ -96,7 +96,7 @@ impl MockAPI {
         //     }
         // }
         MockAPI {
-            storage: RefCell::new([0u8; u32::MAX as usize]),
+            storage: RefCell::new([0u8; u16::MAX as usize]),
         }
     }
 }
