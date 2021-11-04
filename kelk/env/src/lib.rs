@@ -28,6 +28,7 @@ pub mod context;
 pub mod error;
 pub mod params;
 pub mod response;
+pub mod mock_contract;
 
 extern crate alloc;
 

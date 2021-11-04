@@ -3,7 +3,6 @@
 use crate::error::KelkError;
 use crate::params::*;
 use alloc::vec::Vec;
-use core::cell::RefCell;
 
 /// TODO
 pub trait ContextAPI {
