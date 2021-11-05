@@ -1,4 +1,4 @@
-use kelk_env::mock_contract::MockContext;
+use kelk_env::mock::MockContext;
 
 use super::*;
 
