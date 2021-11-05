@@ -1,48 +1,47 @@
 //! Kelk TODO
 
-use core::cell::RefCell;
-
 use alloc::vec::Vec;
 
-use crate::{context::ContextAPI, error::KelkError, params::ParamType};
-
-const MOCK_SIZE: usize = 65535;
+use crate::{
+    context::{ContextAPI, OwnedContext},
+    error::KelkError,
+    params::ParamType,
+};
 
 ///todo
 pub struct MockContext {
-    storage: RefCell<[u8; u16::MAX as usize]>,
+    storage: Vec<u8>,
 }
 
 ///todo
 impl MockContext {
     ///todo
-    pub fn new() -> Self {
-        MockContext {
-            storage: RefCell::new([0u8; MOCK_SIZE]),
+    pub fn new(size: usize) -> OwnedContext<MockContext> {
+        let mut storage = Vec::with_capacity(size);
+        storage.fill(0);
+        OwnedContext {
+            api: MockContext { storage },
         }
     }
 }
 
 impl ContextAPI for MockContext {
-    fn write_storage(&self, offset: u32, data: &[u8]) -> Result<(), KelkError> {
+    fn write_storage(&mut self, offset: u32, data: &[u8]) -> Result<(), KelkError> {
+        if offset as usize + data.len() > self.storage.len() {
+            return Err(KelkError::StorageOutOfBound);
+        }
         for i in 0..data.len() - 1 {
-            let mut store = self.storage.borrow_mut();
-            store[offset as usize + i] = data[i];
+            self.storage[i + offset as usize] = data[i];
         }
         Ok(())
     }
 
     fn read_storage(&self, offset: u32, length: u32) -> Result<Vec<u8>, KelkError> {
-        let c = &self.storage.borrow()[offset as usize..offset as usize + length as usize];
+        let c = &self.storage[offset as usize..offset as usize + length as usize];
         Ok(c.into())
     }
 
-    fn msg_sender(&self) -> Result<Vec<u8>, KelkError> {
-        let c = b"zrb1rwchw6xq0fqj45c9p3lagx9tgu7l9jgzjglp0v";
-        Ok(c.to_vec())
-    }
-
-    fn get_param(&self, param_id: i32) -> Result<ParamType, KelkError> {
+    fn get_param(&self, _param_id: i32) -> Result<ParamType, KelkError> {
         unimplemented!()
     }
 }

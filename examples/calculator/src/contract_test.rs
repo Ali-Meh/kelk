@@ -4,8 +4,7 @@ use super::*;
 
 #[test]
 fn test_add() {
-    let api = MockContext::new();
-    let ctx = ContextMut { api: &api };
-    let res = add(ctx, 1, 1).unwrap();
+    let mut ctx = MockContext::new(10);
+    let res = add(ctx.as_mut(), 1, 1).unwrap();
     assert_eq!(res, 2);
 }
